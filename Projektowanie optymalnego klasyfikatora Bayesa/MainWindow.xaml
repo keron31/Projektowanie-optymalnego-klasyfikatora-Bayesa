@@ -23,14 +23,7 @@
                 <Button x:Name="btnPredict" Content="Wykonaj predykcje" Click="btnPredict_Click" Margin="5"/>
             </StackPanel>
         </StackPanel>
-        <DataGrid x:Name="dgResults" Grid.Row="1" Margin="10" AutoGenerateColumns="False">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Liczba drzwi" Binding="{Binding LiczbaDrzwi}"/>
-                <DataGridTextColumn Header="Moc silnika" Binding="{Binding MocSilnika}"/>
-                <DataGridTextColumn Header="Kolor" Binding="{Binding Kolor}"/>
-                <DataGridTextColumn Header="Marka" Binding="{Binding Marka}"/>
-                <DataGridTextColumn Header="Kup samochód" Binding="{Binding KupSamochod}"/>
-            </DataGrid.Columns>
+        <DataGrid x:Name="dgResults" Grid.Row="1" Margin="10" AutoGenerateColumns="False" IsReadOnly="True">
         </DataGrid>
     </Grid>
 </Window>

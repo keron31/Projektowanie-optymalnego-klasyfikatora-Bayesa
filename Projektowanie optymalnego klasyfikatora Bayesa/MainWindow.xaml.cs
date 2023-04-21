@@ -34,57 +34,14 @@ namespace Projektowanie_optymalnego_klasyfikatora_Bayesa
 
         public class Przypadek : INotifyPropertyChanged
         {
-            private int _liczbaDrzwi;
-            private int _mocSilnika;
-            private string _kolor;
-            private string _marka;
-            private string _kupSamochod;
+            private List<string> _values = new List<string>();
 
-            public int LiczbaDrzwi
+            public List<string> Values
             {
-                get => _liczbaDrzwi;
+                get => _values;
                 set
                 {
-                    _liczbaDrzwi = value;
-                    OnPropertyChanged();
-                }
-            }
-            public int MocSilnika
-            {
-                get => _mocSilnika;
-                set
-                {
-                    _mocSilnika = value;
-                    OnPropertyChanged();
-                }
-            }
-
-            public string Kolor
-            {
-                get => _kolor;
-                set
-                {
-                    _kolor = value;
-                    OnPropertyChanged();
-                }
-            }
-
-            public string Marka
-            {
-                get => _marka;
-                set
-                {
-                    _marka = value;
-                    OnPropertyChanged();
-                }
-            }
-
-            public string KupSamochod
-            {
-                get => _kupSamochod;
-                set
-                {
-                    _kupSamochod = value;
+                    _values = value;
                     OnPropertyChanged();
                 }
             }
@@ -101,30 +58,80 @@ namespace Projektowanie_optymalnego_klasyfikatora_Bayesa
             // Rozdzielanie wprowadzonych przypadków na wiersze
             string[] wiersze = txtCases.Text.Split(new[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
 
+            int columnCount = 0;
+
             foreach (string wiersz in wiersze)
             {
-                // Rozdzielanie wartości w wierszu na podstawie separatora (w tym przypadku tabulacji)
-                string[] wartosci = wiersz.Split(' ');
+                // Rozdzielanie wartości w wierszu na podstawie separatora (w tym przypadku spacji)
+                string[] wartosci = wiersz.Split(txtColumnSeparator.Text);
 
-                try
+                columnCount = Math.Max(columnCount, wartosci.Length);
+
+                // Dodawanie nowego przypadku
+                Przypadek nowyPrzypadek = new Przypadek
                 {
-                    // Dodawanie nowego przypadku
-                    Przypadek nowyPrzypadek = new Przypadek
-                    {
-                        LiczbaDrzwi = int.Parse(wartosci[0]),
-                        MocSilnika = int.Parse(wartosci[1]),
-                        Kolor = wartosci[2].Trim(),
-                        Marka = wartosci[3].Trim(),
-                        KupSamochod = wartosci[4].Trim()
-                    };
-                    Przypadki.Add(nowyPrzypadek);
-                }
-                catch (FormatException)
-                {
-                    MessageBox.Show($"Błąd: Nieprawidłowy format danych w wierszu: '{wiersz}'. Upewnij się, że liczba drzwi i moc silnika są liczbami całkowitymi, a kolor i marka są ciągami tekstowymi. Wartości powinny być oddzielone tabulacją.");
-                }
+                    Values = wartosci.ToList()
+                };
+                Przypadki.Add(nowyPrzypadek);
+
             }
+
+            // Generowanie kolumn na podstawie liczby wprowadzonych kolumn
+            GenerateColumns(columnCount);
+
+            txtCases.Clear();
         }
+
+        private void GenerateColumns(int columnCount)
+        {
+            
+            //dgResults.Columns.Clear();
+            //var columnId = new DataGridTextColumn
+            //{
+            //    Header = "Obiekt (ID)",
+            //    Binding = new Binding("Ids")
+            //};
+            //dgResults.Columns.Add(columnId);
+
+            for (int i = 0; i < columnCount; i++)
+            {
+                var column = new DataGridTextColumn
+                {
+                    Header = $"q{i + 1}",
+                    Binding = new Binding($"Values[{i}]")
+                };
+                dgResults.Columns.Add(column);
+            }
+
+            var actionsColumn = new DataGridTemplateColumn
+            {
+                Header = "Akcje",
+                CellTemplate = CreateEdit_DeleteButtonTemplate()
+            };
+            dgResults.Columns.Add(actionsColumn);
+        }
+
+        private DataTemplate CreateEdit_DeleteButtonTemplate()
+        {
+            var buttonDelete = new FrameworkElementFactory(typeof(Button));
+            buttonDelete.SetValue(Button.ContentProperty, "Usuń");
+            buttonDelete.AddHandler(Button.ClickEvent, new RoutedEventHandler(DeleteButton_Click));
+
+            var stackPanel = new FrameworkElementFactory(typeof(StackPanel));
+            stackPanel.AppendChild(buttonDelete);
+
+            var template = new DataTemplate();
+            template.VisualTree = stackPanel;
+            return template;
+        }
+
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            var row = (Przypadek)button!.DataContext;
+            Przypadki.Remove(row);
+        }
+
 
         private void btnPredict_Click(object sender, RoutedEventArgs e)
         {
