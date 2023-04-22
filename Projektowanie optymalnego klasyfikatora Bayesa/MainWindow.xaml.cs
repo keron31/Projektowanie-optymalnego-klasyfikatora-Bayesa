@@ -26,10 +26,12 @@ namespace Projektowanie_optymalnego_klasyfikatora_Bayesa
     public partial class MainWindow : System.Windows.Window
     {
         public ObservableCollection<Przypadek> Przypadki { get; set; } = new ObservableCollection<Przypadek>();
+        public ObservableCollection<Przypadek> PrzypadkiDoSklasyfikowania { get; set; } = new ObservableCollection<Przypadek>();
         public MainWindow()
         {
             InitializeComponent();
             dgResults.ItemsSource = Przypadki;
+            dgCasesToClassify.ItemsSource = PrzypadkiDoSklasyfikowania;
         }
 
         public class Przypadek : INotifyPropertyChanged
@@ -84,7 +86,7 @@ namespace Projektowanie_optymalnego_klasyfikatora_Bayesa
 
         private void GenerateColumns(int columnCount)
         {
-            
+
             //dgResults.Columns.Clear();
             //var columnId = new DataGridTextColumn
             //{
@@ -132,16 +134,118 @@ namespace Projektowanie_optymalnego_klasyfikatora_Bayesa
             Przypadki.Remove(row);
         }
 
+        private void btnAddCasesToClassify_Click(object sender, RoutedEventArgs e)
+        {
+            string[] wiersze = txtCasesToClassify.Text.Split(new[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
+
+            int columnCount = 0;
+
+            foreach (string wiersz in wiersze)
+            {
+                string[] wartosci = wiersz.Split(txtColumnSeparator.Text);
+
+                columnCount = Math.Max(columnCount, wartosci.Length);
+
+                Przypadek nowyPrzypadek = new Przypadek
+                {
+                    Values = wartosci.ToList()
+                };
+                PrzypadkiDoSklasyfikowania.Add(nowyPrzypadek);
+            }
+
+            GenerateColumnsForCasesToClassify(columnCount);
+
+            txtCasesToClassify.Clear();
+        }
+
+        private void GenerateColumnsForCasesToClassify(int columnCount)
+        {
+            dgCasesToClassify.Columns.Clear();
+
+            for (int i = 0; i < columnCount; i++)
+            {
+                var column = new DataGridTextColumn
+                {
+                    Header = $"q{i + 1}",
+                    Binding = new Binding($"Values[{i}]")
+                };
+                dgCasesToClassify.Columns.Add(column);
+            }
+        }
+
 
         private void btnPredict_Click(object sender, RoutedEventArgs e)
         {
-            // Tutaj powinien być zaimplementowany algorytm klasyfikatora Bayesa
-            // Następnie zaktualizuj wartość właściwości KupSamochod dla każdego przypadku w kolekcji Przypadki
+            var przypadki = Przypadki.ToList();
+            var przypadkiDoSklasyfikowania = PrzypadkiDoSklasyfikowania.ToList();
 
-            // Na przykład:
-            // Przypadki[0].KupSamochod = "Tak";
-            // Przypadki[1].KupSamochod = "Nie";
-            // ...
+            var liczbaAtrybutów = przypadkiDoSklasyfikowania.First().Values.Count;
+
+            double P_Tak = przypadki.Count(x => x.Values.Last() == "Tak");
+            double P_Nie = przypadki.Count(x => x.Values.Last() == "Nie");
+
+            double PC1_Tak = P_Tak / (double)przypadki.Count;
+            double PC2_Nie = P_Nie / (double)przypadki.Count;
+
+            var Y_tak = new List<double>();
+            var Y_nie = new List<double>();
+
+            var Decyzje = new List<string>();
+            var Wyniki = "";
+            for (int i = 0; i < przypadkiDoSklasyfikowania.Count; i++)
+            {
+                var przypadekDoSklasyfikowania = przypadkiDoSklasyfikowania[i];
+
+                for (int k = 0; k < liczbaAtrybutów; k++)
+                {
+                    var q = przypadekDoSklasyfikowania.Values[k];
+                    double Pq_Tak = przypadki.Count(x => x.Values[k] == q && x.Values.Last() == "Tak") / P_Tak;
+                    double Pq_Nie = przypadki.Count(x => x.Values[k] == q && x.Values.Last() == "Nie") / P_Nie;
+
+                    if (Y_tak.Count > i)
+                    {
+                        Y_tak[i] *= Pq_Tak;
+                        Y_nie[i] *= Pq_Nie;
+                    }
+                    else
+                    {
+                        Y_tak.Add(Pq_Tak);
+                        Y_nie.Add(Pq_Nie);
+                    }
+                }
+
+                double IleNaTak = Y_tak[i] * PC1_Tak;
+                double IleNaNie = Y_nie[i] * PC2_Nie;
+
+                if (IleNaTak > IleNaNie)
+                {
+                    Decyzje.Add("Tak");
+                    Wyniki += "Przypadek Y" + (i + 1) + ": " +
+                        string.Join(", ", przypadekDoSklasyfikowania.Values) +
+                        " \nDecyzja: Tak \nNa tak: " + IleNaTak + ", \nNa nie: "
+                        + IleNaNie + " \n\n";
+                }
+                else if (IleNaTak < IleNaNie)
+                {
+                    Decyzje.Add("Nie");
+                    Wyniki += "Przypadek Y" + (i + 1) + ": " +
+                        string.Join(", ", przypadekDoSklasyfikowania.Values) +
+                        " \nDecyzja: Nie \nNa tak: " + IleNaTak + ", \nNa nie: "
+                        + IleNaNie + " \n\n";
+                }
+                else
+                {
+                    Decyzje.Add("Wynik równy");
+                    Wyniki += "Przypadek Y" + (i + 1) + ": " +
+                        string.Join(", ", przypadekDoSklasyfikowania.Values) +
+                        " \nDecyzja: Wynik równy \nNa tak: " + IleNaTak + ", \nNa nie: "
+                        + IleNaNie + " \n\n";
+                }
+            }
+
+            var customDialog = new CustomDialog();
+            customDialog.SetResultsText(Wyniki);
+            customDialog.ShowDialog();
         }
     }
 }
