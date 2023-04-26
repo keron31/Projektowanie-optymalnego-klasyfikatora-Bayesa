@@ -5,34 +5,51 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Projektowanie_optymalnego_klasyfikatora_Bayesa"
         mc:Ignorable="d"
-        Title="Projektowanie optymalnego klasyfikatora Bayesa" Height="800" Width="700">
+        Title="Projektowanie optymalnego klasyfikatora Bayesa" Height="800" Width="700"
+        Icon="generate_logo_for_artificial_intelligence.png">
     <Grid>
+        <Grid.Background>
+            <ImageBrush ImageSource="background_for_applications_for_intelligent.png" Stretch="UniformToFill"/>
+        </Grid.Background>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <StackPanel Margin="10">
             <StackPanel Orientation="Horizontal">
-                <TextBlock TextAlignment="Center" Width="150" Height="50" TextWrapping="Wrap" Text="Wprowadź przypadki (jeden na wiersz):"/>
+                <TextBlock Background="LightBlue" Padding ="5" TextAlignment="Center" Width="150" Height="60" TextWrapping="Wrap" Text="Wprowadź zbiór danych (przypadki - jeden na wiersz):" />
                 <TextBox x:Name="txtCases" Width="500" Height="100" Margin="5" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <TextBlock TextAlignment="Center" Width="150" Height="50" TextWrapping="Wrap" Text="Wprowadź przypadki do sklasyfikowania (jeden na wiersz):"/>
+                <TextBlock Background="LightBlue" Padding ="5" TextAlignment="Center" Width="150" Height="60" TextWrapping="Wrap" Text="Wprowadź przypadki do sklasyfikowania (jeden na wiersz):"/>
                 <TextBox x:Name="txtCasesToClassify" Width="500" Height="100" Margin="5" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <TextBlock TextAlignment="Center" Width="150" Height="40" TextWrapping="Wrap" Text="Wpisz znak rozdzielania kolumn (domyślnie spacja):" />
-                <TextBox x:Name="txtColumnSeparator" Text=" " Width="50" Height="40" Margin="5"/>
-                <Button x:Name="btnAddCases" Content="Dodaj przypadki" Click="btnAddCases_Click" Margin="5"/>
-                <Button x:Name="btnAddCasesToClassify" Content="Dodaj przypadki do sklasyfikowania" Click="btnAddCasesToClassify_Click" Margin="5"/>
-                <Button x:Name="btnPredict" Content="Wykonaj predykcje" Click="btnPredict_Click" Margin="5"/>
+                <TextBlock Background="LightBlue" Padding ="5" TextAlignment="Center" Width="150" Height="60" TextWrapping="Wrap" Text="Wpisz znak rozdzielania kolumn (domyślnie spacja):" />
+                <RichTextBox  x:Name="txtColumnSeparator" FontSize="20" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="50" Height="30" Margin="5" Padding="0">
+                    <FlowDocument>
+                        <Paragraph TextAlignment="Center">
+                            <Run Text=" " Background="LightBlue"/>
+                        </Paragraph>
+                    </FlowDocument>
+                </RichTextBox>
+                <Button x:Name="btnAddCases" Content="Dodaj przypadki" Click="btnAddCases_Click" Margin="5" Padding="5"/>
+                <Button x:Name="btnAddCasesToClassify" Content="Dodaj przypadki do sklasyfikowania" Click="btnAddCasesToClassify_Click" Margin="5" Padding="5"/>
+                <Button x:Name="btnPredict" Content="Wykonaj predykcje" Click="btnPredict_Click" Margin="5" Padding="5"/>
             </StackPanel>
+            <Grid>
+                <Button x:Name="btnInstruction" Padding="5" Content="Wyświetl instrukcję obsługi programu" Click="btnInstruction_Click" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5"/>
+            </Grid>
         </StackPanel>
         <DataGrid x:Name="dgResults" Grid.Row="1" Margin="10" AutoGenerateColumns="False" IsReadOnly="True">
         </DataGrid>
         <DataGrid x:Name="dgCasesToClassify" Grid.Row="3" Margin="10" AutoGenerateColumns="False" IsReadOnly="True">
         </DataGrid>
+        <StackPanel Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock Text="Aplikacja została napisana przez: Norbert Boguski (2023)" FontWeight="Bold" FontStyle="Italic" FontSize="14" Margin="3" Foreground="LightBlue"/>
+        </StackPanel>
     </Grid>
 </Window>

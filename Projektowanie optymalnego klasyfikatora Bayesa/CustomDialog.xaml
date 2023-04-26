@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Projektowanie_optymalnego_klasyfikatora_Bayesa"
         mc:Ignorable="d"
-        Title="Wyniki" Height="600" Width="400">
+        Title="Wyniki" Height="600" Width="400"
+        Icon="generate_logo_for_artificial_intelligence.png">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>

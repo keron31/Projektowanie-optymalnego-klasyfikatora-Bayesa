@@ -9,6 +9,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="background_for_applications_for_intelligent.png" />
+    <None Remove="generate_logo_for_artificial_intelligence.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="background_for_applications_for_intelligent.png" />
+    <Resource Include="generate_logo_for_artificial_intelligence.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="ExcelDataReader" Version="3.6.0" />
     <PackageReference Include="ExcelDataReader.DataSet" Version="3.6.0" />
     <PackageReference Include="Microsoft.Office.Interop.Excel" Version="15.0.4795.1001" />

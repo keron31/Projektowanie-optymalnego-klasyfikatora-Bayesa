@@ -247,5 +247,11 @@ namespace Projektowanie_optymalnego_klasyfikatora_Bayesa
             customDialog.SetResultsText(Wyniki);
             customDialog.ShowDialog();
         }
+
+        private void btnInstruction_Click(object sender, RoutedEventArgs e)
+        {
+            var instructionDialog = new InstructionDialog();
+            instructionDialog.ShowDialog();
+        }
     }
 }
