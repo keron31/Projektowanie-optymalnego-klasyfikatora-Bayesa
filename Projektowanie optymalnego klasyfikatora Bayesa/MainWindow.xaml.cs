@@ -37,6 +37,7 @@ namespace Projektowanie_optymalnego_klasyfikatora_Bayesa
         public class Przypadek : INotifyPropertyChanged
         {
             private List<string> _values = new List<string>();
+            private string _id;
 
             public List<string> Values
             {
@@ -46,6 +47,16 @@ namespace Projektowanie_optymalnego_klasyfikatora_Bayesa
                     _values = value;
                     OnPropertyChanged();
                 }
+            }
+
+            public string Id 
+            { 
+                get => _id; 
+                set 
+                { 
+                    _id = value; 
+                    OnPropertyChanged(); 
+                } 
             }
 
             public event PropertyChangedEventHandler PropertyChanged;
@@ -61,9 +72,10 @@ namespace Projektowanie_optymalnego_klasyfikatora_Bayesa
             string[] wiersze = txtCases.Text.Split(new[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
 
             int columnCount = 0;
-
+            int i = 0;
             foreach (string wiersz in wiersze)
             {
+                i++;
                 // Rozdzielanie wartości w wierszu na podstawie separatora (w tym przypadku spacji)
                 string[] wartosci = wiersz.Split(txtColumnSeparator.Text);
 
@@ -72,6 +84,7 @@ namespace Projektowanie_optymalnego_klasyfikatora_Bayesa
                 // Dodawanie nowego przypadku
                 Przypadek nowyPrzypadek = new Przypadek
                 {
+                    Id = "X" + i,
                     Values = wartosci.ToList()
                 };
                 Przypadki.Add(nowyPrzypadek);
@@ -95,14 +108,33 @@ namespace Projektowanie_optymalnego_klasyfikatora_Bayesa
             //};
             //dgResults.Columns.Add(columnId);
 
+            var columnID = new DataGridTextColumn
+            {
+                Header = "Obiekt (ID)",
+                Binding = new Binding($"Id")
+            };
+            dgResults.Columns.Add(columnID);
+
             for (int i = 0; i < columnCount; i++)
             {
-                var column = new DataGridTextColumn
+                if (i == columnCount - 1)
                 {
-                    Header = $"q{i + 1}",
-                    Binding = new Binding($"Values[{i}]")
-                };
-                dgResults.Columns.Add(column);
+                    var column = new DataGridTextColumn
+                    {
+                        Header = "Klasa",
+                        Binding = new Binding($"Values[{i}]")
+                    };
+                    dgResults.Columns.Add(column);
+                }
+                else
+                {
+                    var column = new DataGridTextColumn
+                    {
+                        Header = $"q{i + 1}",
+                        Binding = new Binding($"Values[{i}]")
+                    };
+                    dgResults.Columns.Add(column);
+                }
             }
 
             var actionsColumn = new DataGridTemplateColumn
@@ -181,17 +213,20 @@ namespace Projektowanie_optymalnego_klasyfikatora_Bayesa
 
             var liczbaAtrybutów = przypadkiDoSklasyfikowania.First().Values.Count;
 
+            // jezeli mamy tylko dwie decyzje statyczne "Tak" i "Nie"
+            /* var Wyniki = "";
+
             double P_Tak = przypadki.Count(x => x.Values.Last() == "Tak");
             double P_Nie = przypadki.Count(x => x.Values.Last() == "Nie");
 
+            Wyniki += "P_Tak: " + P_Tak + " P_Nie: " + P_Nie + "\n";
             double PC1_Tak = P_Tak / (double)przypadki.Count;
             double PC2_Nie = P_Nie / (double)przypadki.Count;
-
+            Wyniki += "PC1_Tak: " + PC1_Tak + " PC2_Nie: " + PC2_Nie + "\n";
             var Y_tak = new List<double>();
             var Y_nie = new List<double>();
 
             var Decyzje = new List<string>();
-            var Wyniki = "";
             for (int i = 0; i < przypadkiDoSklasyfikowania.Count; i++)
             {
                 var przypadekDoSklasyfikowania = przypadkiDoSklasyfikowania[i];
@@ -201,6 +236,8 @@ namespace Projektowanie_optymalnego_klasyfikatora_Bayesa
                     var q = przypadekDoSklasyfikowania.Values[k];
                     double Pq_Tak = przypadki.Count(x => x.Values[k] == q && x.Values.Last() == "Tak") / P_Tak;
                     double Pq_Nie = przypadki.Count(x => x.Values[k] == q && x.Values.Last() == "Nie") / P_Nie;
+
+                    Wyniki += "Pq_Tak: " + Pq_Tak + " Pq_Nie: " + Pq_Nie + "\n";
 
                     if (Y_tak.Count > i)
                     {
@@ -213,6 +250,8 @@ namespace Projektowanie_optymalnego_klasyfikatora_Bayesa
                         Y_nie.Add(Pq_Nie);
                     }
                 }
+
+                Wyniki += "Y_tak: " + Y_tak[i] + " Y_nie: " + Y_nie[i] + "\n";
 
                 double IleNaTak = Y_tak[i] * PC1_Tak;
                 double IleNaNie = Y_nie[i] * PC2_Nie;
@@ -241,6 +280,53 @@ namespace Projektowanie_optymalnego_klasyfikatora_Bayesa
                         " \nDecyzja: Wynik równy \nNa tak: " + IleNaTak + ", \nNa nie: "
                         + IleNaNie + " \n\n";
                 }
+            } */
+
+            // jezeli mamy wiecej niz dwie decyzje
+            // Pobierz unikalne wartości decyzji z ostatniej kolumny przypadków
+            var decyzje = przypadki.Select(x => x.Values.Last()).Distinct().ToList();
+
+            // Utwórz słownik do przechowywania wartości prawdopodobieństwa dla różnych wartości decyzji
+            var prawdopodobienstwoDecyzji = new Dictionary<string, double>();
+            foreach (var decyzja in decyzje)
+            {
+                prawdopodobienstwoDecyzji[decyzja] = przypadki.Count(x => x.Values.Last() == decyzja) / (double)przypadki.Count;
+            }
+
+            var yDecyzje = new List<Dictionary<string, double>>();
+            var Wyniki = "";
+
+            for (int i = 0; i < przypadkiDoSklasyfikowania.Count; i++)
+            {
+                var przypadekDoSklasyfikowania = przypadkiDoSklasyfikowania[i];
+
+                var yDecyzja = new Dictionary<string, double>();
+                foreach (var decyzja in decyzje)
+                {
+                    yDecyzja[decyzja] = 1.0;
+
+                    for (int k = 0; k < liczbaAtrybutów; k++)
+                    {
+                        var q = przypadekDoSklasyfikowania.Values[k];
+                        double Pq_Decyzja = przypadki.Count(x => x.Values[k] == q && x.Values.Last() == decyzja) / (double)przypadki.Count(x => x.Values.Last() == decyzja);
+                        yDecyzja[decyzja] *= Pq_Decyzja;
+                    }
+
+                    yDecyzja[decyzja] *= prawdopodobienstwoDecyzji[decyzja];
+                }
+
+                yDecyzje.Add(yDecyzja);
+
+                var maxDecyzja = yDecyzja.Aggregate((l, r) => l.Value > r.Value ? l : r).Key;
+                Wyniki += "Przypadek Y" + (i + 1) + ": " +
+                    string.Join(", ", przypadekDoSklasyfikowania.Values) +
+                    " \nDecyzja: " + maxDecyzja;
+
+                foreach (var decyzja in decyzje)
+                {
+                    Wyniki += " \nNa " + decyzja + ": " + yDecyzja[decyzja];
+                }
+                Wyniki += " \n\n";
             }
 
             var customDialog = new CustomDialog();

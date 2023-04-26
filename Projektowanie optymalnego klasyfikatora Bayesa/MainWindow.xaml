@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Projektowanie_optymalnego_klasyfikatora_Bayesa"
         mc:Ignorable="d"
-        Title="Projektowanie optymalnego klasyfikatora Bayesa" Height="800" Width="710"
+        Title="Projektowanie optymalnego klasyfikatora Bayesa" Height="900" Width="710"
         Icon="generate_logo_for_artificial_intelligence.png">
     <Grid>
         <Grid.Background>

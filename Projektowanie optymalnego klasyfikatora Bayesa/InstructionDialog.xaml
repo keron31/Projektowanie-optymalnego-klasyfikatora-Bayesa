@@ -12,7 +12,7 @@
             <Run FontWeight="Bold" FontSize="16">Instrukcja obsługi programu</Run>
             <LineBreak/>
             <LineBreak/>
-            Program powstał na zajęcia pracowni specjalistycznej z przedmiotu Inteligentne systemy informatyczne. W założeniu projektuje on optymalny klasyfikator Bayesa dla danego zbioru danych. Program dokonuje predykcji dla nowych przypadków.
+            Program powstał na zajęcia pracowni specjalistycznej z przedmiotu Inteligentne systemy informatyczne. W założeniu projektuje on optymalny klasyfikator Bayesa dla danego zbioru danych. Program dokonuje predykcji dla nowych przypadków, jest w stanie obsłużyć wiele różnych klas oraz atrybutów.
             <LineBreak/>
             <LineBreak/>
             <Run FontWeight="Bold">Kolejne kroki użycia programu:</Run>
