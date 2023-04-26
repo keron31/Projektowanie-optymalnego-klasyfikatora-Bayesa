@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Projektowanie_optymalnego_klasyfikatora_Bayesa"
         mc:Ignorable="d"
-        Title="Projektowanie optymalnego klasyfikatora Bayesa" Height="800" Width="700"
+        Title="Projektowanie optymalnego klasyfikatora Bayesa" Height="800" Width="710"
         Icon="generate_logo_for_artificial_intelligence.png">
     <Grid>
         <Grid.Background>
@@ -29,10 +29,10 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Margin="5" Background="LightBlue" Padding ="5" TextAlignment="Center" Width="150" Height="60" TextWrapping="Wrap" Text="Wpisz znak rozdzielania kolumn (domyślnie spacja):" />
-                <RichTextBox  x:Name="txtColumnSeparator" FontSize="20" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="40" Height="35" Margin="5" Padding="5">
+                <RichTextBox  FontSize="20" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="40" Height="35" Margin="5" Padding="5">
                     <FlowDocument>
                         <Paragraph TextAlignment="Center">
-                            <Run Text=" " Background="LightBlue"/>
+                            <Run x:Name="txtColumnSeparator" Text=" " Background="LightBlue"/>
                         </Paragraph>
                     </FlowDocument>
                 </RichTextBox>
