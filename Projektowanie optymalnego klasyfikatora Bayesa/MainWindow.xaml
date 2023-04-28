@@ -40,9 +40,13 @@
                 <Button x:Name="btnAddCasesToClassify" Content="Dodaj przypadki do sklasyfikowania" Click="btnAddCasesToClassify_Click" Margin="5" Padding="10, 5, 10, 5"/>
                 <Button x:Name="btnPredict" Content="Wykonaj predykcje" Click="btnPredict_Click" Margin="5" Padding="10, 5, 10, 5"/>
             </StackPanel>
-            <Grid>
-                <Button x:Name="btnInstruction" Height="40" Padding="10, 5, 10, 5" Content="Wyświetl instrukcję obsługi programu" Click="btnInstruction_Click" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="15, 15, 15, 0"/>
-            </Grid>
+            <StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Button x:Name="btnInstruction" Height="40" Padding="10, 5, 10, 5" Content="Wyświetl instrukcję obsługi" Click="btnInstruction_Click" Margin="10, 15, 0, 0"/>
+                    <Button x:Name="btnDeleteCases" Height="40" Padding="10, 5, 10, 5" Content="Usuń zbiór danych (sklasyfikowane przypadki)" Click="btnDeleteCases_Click" Margin="10, 15, 0, 0"/>
+                    <Button x:Name="btnDeleteCasesToClassify" Height="40" Padding="10, 5, 10, 5" Content="Usuń przypadki do sklasyfikowania" Click="btnDeleteCasesToClassify_Click" Margin="10, 15, 10, 0"/>
+                </StackPanel>
+            </StackPanel>
         </StackPanel>
         <DataGrid x:Name="dgResults" Grid.Row="1" Margin="10" AutoGenerateColumns="False" IsReadOnly="True">
         </DataGrid>

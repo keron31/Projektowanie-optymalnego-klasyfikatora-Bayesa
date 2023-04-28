@@ -5,10 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Projektowanie_optymalnego_klasyfikatora_Bayesa"
         mc:Ignorable="d"
-        Title="Instrukcja Obsługi" Height="800" Width="700"
+        Title="Instrukcja Obsługi" Height="900" Width="700"
         Icon="generate_logo_for_artificial_intelligence.png">
     <ScrollViewer>
-        <TextBlock Margin="10" TextWrapping="Wrap">
+        <TextBlock Margin="10" Padding="10" TextWrapping="Wrap">
             <Run FontWeight="Bold" FontSize="16">Instrukcja obsługi programu</Run>
             <LineBreak/>
             <LineBreak/>
@@ -18,7 +18,8 @@
             <Run FontWeight="Bold">Kolejne kroki użycia programu:</Run>
             <LineBreak/>
             <LineBreak/>
-            <Run Text="• " FontWeight="Bold"/><Run FontWeight="Bold">Krok 1:</Run> Wprowadź przypadki (zbiór danych) oraz określ znak separatora (rozdzielenia) danych (domyślnie ustawiona jest spacja). Wciśnij przycisk "Dodaj przypadki". Przykładowe dane:
+            <Run Text="• " FontWeight="Bold"/><Run FontWeight="Bold">Krok 1:</Run> Wprowadź przypadki (zbiór danych) oraz określ znak separatora (rozdzielenia) danych, tak aby system mógł podzielić wprowadzone przez Ciebie dane w wierszu na odpowiednie kolumny (domyślnie ustawiona jest spacja). Wciśnij przycisk "Dodaj przypadki". Przykładowe dane:
+            <LineBreak/>
             <LineBreak/>
             2	200	niebieski	Opel	Tak
             <LineBreak/>
@@ -71,6 +72,7 @@
             <LineBreak/>
             <Run Text="• " FontWeight="Bold"/><Run FontWeight="Bold">Krok 2:</Run> Wprowadź przypadki do sklasyfikowania. Kliknij przycisk "Dodaj przypadki do sklasyfikowania". Przykładowe dane:
             <LineBreak/>
+            <LineBreak/>
             2 100 czerwony Mercedes
             <LineBreak/>
             4 100 niebieski Opel
@@ -83,6 +85,14 @@
             <LineBreak/>
             <LineBreak/>
             <Run Text="• " FontWeight="Bold"/><Run FontWeight="Bold">Krok 3:</Run> Jeżeli wprowadziłeś zbiór danych (sklasyfikowanwe przypadki) oraz przypadki do sklasyfikowania wciśnij przycisk "Wykonaj predykcje". Program sklasyfikuje podane przypadki i wyświetli wynik w nowym oknie.
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <RichTextBox x:Name="rtbResults" IsReadOnly="True" />
+        <Button x:Name="btnClose" Grid.Row="1" Content="Zamknij" Click="btnClose_Click" Width="100" Height="30" HorizontalAlignment="Right" Margin="0, 15, 15, 0"/>
+    </Grid>
         </TextBlock>
     </ScrollViewer>
 </Window>

@@ -23,5 +23,10 @@ namespace Projektowanie_optymalnego_klasyfikatora_Bayesa
         {
             InitializeComponent();
         }
+
+        private void btnClose_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
     }
 }

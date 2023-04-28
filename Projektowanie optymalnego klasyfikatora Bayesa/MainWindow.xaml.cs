@@ -71,6 +71,20 @@ namespace Projektowanie_optymalnego_klasyfikatora_Bayesa
             // Rozdzielanie wprowadzonych przypadków na wiersze
             string[] wiersze = txtCases.Text.Split(new[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
 
+            if (wiersze == null || wiersze.Length == 0)
+            {
+                MessageBoxResult result = MessageBox.Show("Nie wprowadzono zbioru danych (przypadków). Wprowadź dane do odpowiedniego pola tekstowego i spróbuj ponownie.",
+                    "Brak danych!", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                return;
+            }
+
+            if (string.IsNullOrEmpty(txtColumnSeparator.Text))
+            {
+                MessageBoxResult result = MessageBox.Show("Nie wprowadzono separatora znaków. Bez niego system nie jest w stanie rozdzielić tesktu w danym wierszu na różne kolumny. Dodaj znak który odpowiada za separację we wprowadzonych przez Ciebie danych i spróbuj ponownie.",
+                    "Brak separatora!", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                return;
+            }
+
             int columnCount = 0;
             int i = 0;
             foreach (string wiersz in wiersze)
@@ -108,6 +122,7 @@ namespace Projektowanie_optymalnego_klasyfikatora_Bayesa
             //};
             //dgResults.Columns.Add(columnId);
 
+            dgResults.Columns.Clear();
             var columnID = new DataGridTextColumn
             {
                 Header = "Obiekt (ID)",
@@ -170,6 +185,20 @@ namespace Projektowanie_optymalnego_klasyfikatora_Bayesa
         {
             string[] wiersze = txtCasesToClassify.Text.Split(new[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
 
+            if (wiersze == null || wiersze.Length == 0)
+            {
+                MessageBoxResult result = MessageBox.Show("Nie wprowadzono przypadków do sklasyfikowania. Wprowadź dane do odpowiedniego pola tekstowego i spróbuj ponownie.",
+                    "Brak danych!", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                return;
+            }
+
+            if (string.IsNullOrEmpty(txtColumnSeparator.Text))
+            {
+                MessageBoxResult result = MessageBox.Show("Nie wprowadzono separatora znaków. Bez niego system nie jest w stanie rozdzielić tesktu w danym wierszu na różne kolumny. Dodaj znak który odpowiada za separację we wprowadzonych przez Ciebie danych i spróbuj ponownie.",
+                    "Brak separatora!", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                return;
+            }
+
             int columnCount = 0;
 
             foreach (string wiersz in wiersze)
@@ -210,6 +239,23 @@ namespace Projektowanie_optymalnego_klasyfikatora_Bayesa
         {
             var przypadki = Przypadki.ToList();
             var przypadkiDoSklasyfikowania = PrzypadkiDoSklasyfikowania.ToList();
+
+            if (przypadki.Count == 0 && przypadkiDoSklasyfikowania.Count == 0)
+            {
+                MessageBoxResult result = MessageBox.Show("Nie wprowadzono zbioru danych ani przypadków do sklasyfikowania. Aby wykonać predykcję, wprowadź zbiór danych i przypadki do sklasyfikowania.",
+                    "Brak wystarczających danych!", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                return;
+            } else if (przypadki.Count == 0)
+            {
+                MessageBoxResult result = MessageBox.Show("Nie wprowadzono zbioru danych. Aby wykonać predykcję, wprowadź zbiór danych.",
+                    "Brak wystarczających danych!", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                return;
+            } else if (przypadkiDoSklasyfikowania.Count == 0)
+            {
+                MessageBoxResult result = MessageBox.Show("Nie wprowadzono przypadków do sklasyfikowania. Aby wykonać predykcję, wprowadź przypadki do sklasyfikowania.",
+                    "Brak wystarczających danych!", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                return;
+            }
 
             var liczbaAtrybutów = przypadkiDoSklasyfikowania.First().Values.Count;
 
@@ -338,6 +384,18 @@ namespace Projektowanie_optymalnego_klasyfikatora_Bayesa
         {
             var instructionDialog = new InstructionDialog();
             instructionDialog.ShowDialog();
+        }
+
+        private void btnDeleteCases_Click (object sender, RoutedEventArgs e)
+        {
+            Przypadki.Clear();
+            dgResults.Columns.Clear();
+        }
+
+        private void btnDeleteCasesToClassify_Click (object sender, RoutedEventArgs e)
+        {
+            PrzypadkiDoSklasyfikowania.Clear();
+            dgCasesToClassify.Columns.Clear();
         }
     }
 }
