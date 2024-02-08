@@ -1,6 +1,4 @@
-﻿using ExcelDataReader;
-using Microsoft.Office.Interop.Word;
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -260,7 +258,7 @@ namespace Projektowanie_optymalnego_klasyfikatora_Bayesa
             var liczbaAtrybutów = przypadkiDoSklasyfikowania.First().Values.Count;
 
             // jezeli mamy tylko dwie decyzje statyczne "Tak" i "Nie"
-            /* var Wyniki = "";
+             var Wyniki = "";
 
             double P_Tak = przypadki.Count(x => x.Values.Last() == "Tak");
             double P_Nie = przypadki.Count(x => x.Values.Last() == "Nie");
@@ -268,7 +266,7 @@ namespace Projektowanie_optymalnego_klasyfikatora_Bayesa
             Wyniki += "P_Tak: " + P_Tak + " P_Nie: " + P_Nie + "\n";
             double PC1_Tak = P_Tak / (double)przypadki.Count;
             double PC2_Nie = P_Nie / (double)przypadki.Count;
-            Wyniki += "PC1_Tak: " + PC1_Tak + " PC2_Nie: " + PC2_Nie + "\n";
+            Wyniki += "PC1_Tak: " + PC1_Tak + " PC2_Nie: " + PC2_Nie + "\n\n";
             var Y_tak = new List<double>();
             var Y_nie = new List<double>();
 
@@ -276,14 +274,14 @@ namespace Projektowanie_optymalnego_klasyfikatora_Bayesa
             for (int i = 0; i < przypadkiDoSklasyfikowania.Count; i++)
             {
                 var przypadekDoSklasyfikowania = przypadkiDoSklasyfikowania[i];
-
+                Wyniki += "Przypadek Y" + (i + 1) + ": " + string.Join(", ", przypadekDoSklasyfikowania.Values) + "\n";
                 for (int k = 0; k < liczbaAtrybutów; k++)
                 {
                     var q = przypadekDoSklasyfikowania.Values[k];
                     double Pq_Tak = przypadki.Count(x => x.Values[k] == q && x.Values.Last() == "Tak") / P_Tak;
                     double Pq_Nie = przypadki.Count(x => x.Values[k] == q && x.Values.Last() == "Nie") / P_Nie;
 
-                    Wyniki += "Pq_Tak: " + Pq_Tak + " Pq_Nie: " + Pq_Nie + "\n";
+                    Wyniki += "Pq" + (k + 1) + "_Tak: " + Pq_Tak + " Pq" + (k + 1) + "_Nie: " + Pq_Nie + "\n";
 
                     if (Y_tak.Count > i)
                     {
@@ -305,32 +303,23 @@ namespace Projektowanie_optymalnego_klasyfikatora_Bayesa
                 if (IleNaTak > IleNaNie)
                 {
                     Decyzje.Add("Tak");
-                    Wyniki += "Przypadek Y" + (i + 1) + ": " +
-                        string.Join(", ", przypadekDoSklasyfikowania.Values) +
-                        " \nDecyzja: Tak \nNa tak: " + IleNaTak + ", \nNa nie: "
-                        + IleNaNie + " \n\n";
+                    Wyniki += " Decyzja: Tak \nNa tak: " + IleNaTak + ", \nNa nie: " + IleNaNie + " \n\n";
                 }
                 else if (IleNaTak < IleNaNie)
                 {
                     Decyzje.Add("Nie");
-                    Wyniki += "Przypadek Y" + (i + 1) + ": " +
-                        string.Join(", ", przypadekDoSklasyfikowania.Values) +
-                        " \nDecyzja: Nie \nNa tak: " + IleNaTak + ", \nNa nie: "
-                        + IleNaNie + " \n\n";
+                    Wyniki += " Decyzja: Nie \nNa tak: " + IleNaTak + ", \nNa nie: " + IleNaNie + " \n\n";
                 }
                 else
                 {
                     Decyzje.Add("Wynik równy");
-                    Wyniki += "Przypadek Y" + (i + 1) + ": " +
-                        string.Join(", ", przypadekDoSklasyfikowania.Values) +
-                        " \nDecyzja: Wynik równy \nNa tak: " + IleNaTak + ", \nNa nie: "
-                        + IleNaNie + " \n\n";
+                    Wyniki += " Decyzja: Wynik równy \nNa tak: " + IleNaTak + ", \nNa nie: " + IleNaNie + " \n\n";
                 }
-            } */
+            } 
 
             // jezeli mamy wiecej niz dwie decyzje
             // Pobierz unikalne wartości decyzji z ostatniej kolumny przypadków
-            var decyzje = przypadki.Select(x => x.Values.Last()).Distinct().ToList();
+           /* var decyzje = przypadki.Select(x => x.Values.Last()).Distinct().ToList();
 
             // Utwórz słownik do przechowywania wartości prawdopodobieństwa dla różnych wartości decyzji
             var prawdopodobienstwoDecyzji = new Dictionary<string, double>();
@@ -373,7 +362,7 @@ namespace Projektowanie_optymalnego_klasyfikatora_Bayesa
                     Wyniki += " \nNa " + decyzja + ": " + yDecyzja[decyzja];
                 }
                 Wyniki += " \n\n";
-            }
+            }*/
 
             var customDialog = new CustomDialog();
             customDialog.SetResultsText(Wyniki);
